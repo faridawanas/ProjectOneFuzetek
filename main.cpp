@@ -35,17 +35,15 @@ public:
     }
 
     string getStatus() const {
-        // TODO: Implement getter
-        return "";
+        return status;
     }
 
     string getLastSeen() const {
-        // TODO: Implement getter
-        return "";
+        return lastSeen;
     }
 
     void setStatus(string newStatus) {
-        // TODO: Implement setter
+         status = newStatus;
     }
 
     void setPhoneNumber(string phone) {
@@ -53,7 +51,11 @@ public:
     }
 
     void updateLastSeen() {
-        // TODO: Implement last seen update
+       time_t now = time(nullptr);
+    lastSeen = ctime(&now);
+    if (!lastSeen.empty() && lastSeen.back() == '\n') {
+        lastSeen.pop_back();
+    }
     }
 
     bool checkPassword(string pwd) const {
