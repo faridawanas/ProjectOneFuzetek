@@ -2,12 +2,14 @@
 #include <vector>
 #include <string>
 #include <ctime>
+#include <windows.h>
 using namespace std;
 
 // ========================
 //       USER CLASS
 // ========================
-class User {
+class User
+{
 private:
     string username;
     string password;
@@ -16,54 +18,66 @@ private:
     string lastSeen;
 
 public:
-    User() {
+    User()
+    {
         // TODO: Implement default constructor
     }
 
-    User(string uname, string pwd, string phone) {
+    User(string uname, string pwd, string phone)
+    {
         // TODO: Implement parameterized constructor
     }
 
-    string getUsername() const {
+    string getUsername() const
+    {
         // TODO: Implement getter
         return "";
     }
 
-    string getPhoneNumber() const {
+    string getPhoneNumber() const
+    {
         // TODO: Implement getter
         return "";
     }
 
-    string getStatus() const {
+    string getStatus() const
+    {
         return status;
     }
 
-    string getLastSeen() const {
+    string getLastSeen() const
+    {
         return lastSeen;
     }
 
-    void setStatus(string newStatus) {
-         status = newStatus;
+    void setStatus(string newStatus)
+    {
+        status = newStatus;
     }
 
-    void setPhoneNumber(string phone) {
+    void setPhoneNumber(string phone)
+    {
         // TODO: Implement setter
     }
 
-    void updateLastSeen() {
-       time_t now = time(nullptr);
-    lastSeen = ctime(&now);
-    if (!lastSeen.empty() && lastSeen.back() == '\n') {
-        lastSeen.pop_back();
-    }
+    void updateLastSeen()
+    {
+        time_t now = time(nullptr);
+        lastSeen = ctime(&now);
+        if (!lastSeen.empty() && lastSeen.back() == '\n')
+        {
+            lastSeen.pop_back();
+        }
     }
 
-    bool checkPassword(string pwd) const {
+    bool checkPassword(string pwd) const
+    {
         // TODO: Implement password check
         return false;
     }
 
-    void changePassword(string newPwd) {
+    void changePassword(string newPwd)
+    {
         // TODO: Implement password change
     }
 };
@@ -71,7 +85,8 @@ public:
 // ========================
 //      MESSAGE CLASS
 // ========================
-class Message {
+class Message
+{
 private:
     string sender;
     string content;
@@ -80,7 +95,8 @@ private:
     Message* replyTo;
 
 public:
-    Message() {
+    Message()
+    {
         // TODO: Implement default constructor
         // all value are empty
         sender = "";
@@ -90,7 +106,8 @@ public:
         replyTo = nullptr;
     }
 
-    Message(string sndr, string cntnt) {
+    Message(string sndr, string cntnt)
+    {
         // TODO: Implement parameterized constructor
         sender = sndr;
         content = cntnt;
@@ -101,90 +118,151 @@ public:
 
     }
 
-    string getContent() const {
+    string getContent() const
+    {
         // TODO: Implement getter
 
         return content;
     }
 
-    string getSender() const {
+    string getSender() const
+    {
         // TODO: Implement getter
         return sender;
     }
 
-    string getTimestamp() const {
+    string getTimestamp() const
+    {
         // TODO: Implement getter
         return timestamp;
     }
 
-    string getStatus() const {
+    string getStatus() const
+    {
         return this->status;
     }
 
-    Message* getReplyTo() const {
+    Message* getReplyTo() const
+    {
         return this->replyTo;
     }
 
-    void setStatus(string newStatus) {
+    void setStatus(string newStatus)
+    {
         this->status = newStatus;
     }
 
-    void setReplyTo(Message* msg) {
+    void setReplyTo(Message* msg)
+    {
         this->replyTo = msg;
     }
 
-    void updateTimestamp() {
+    void updateTimestamp()
+    {
         // TODO: Implement timestamp update
         time_t curr_now = time(nullptr); // get current time from c time library and put it in time_t variable
         timestamp = ctime(&curr_now); // convert that number variable into a string and update the current timestamp to that timestmp
     }
 
-    void display() const {
+    void display() const
+    {
         // TODO: Implement message display
+        cout << "From: " << sender << endl;
+        cout << "Time: " << timestamp << endl;
+        cout << "Status: " << status << endl;
+        if (replyTo != nullptr)
+        {
+            cout << "Replying to: " << endl;
+            cout << replyTo->getSender() << ": \"" << replyTo->getContent() << "\"" << endl;
+        }
+        cout << "Message:\t\"" << content << "\"" << endl;
+
     }
 
-    void addEmoji(string emojiCode) {
+    void addEmoji(string emojiCode)
+    {
         // TODO: Implement emoji support
+        for (int i = 0; i < content.size(); i++)
+        {
+            if (i + 10 <= content.size() && content.compare(i, 10, ":thumbsup:") == 0 && emojiCode == ":thumbsup:")
+            {
+                content.replace(i, 10, "👍");
+                i++;
+            }
+            else if (i + 2 <= content.size())
+            {
+                string sub = content.substr(i, 2);
+                if (sub == ":)" && emojiCode == ":)")
+                {
+                    content.replace(i, 2, "😊");
+                    i++;
+                }
+                else if (sub == ":(" && emojiCode == ":(")
+                {
+                    content.replace(i, 2, "😢");
+                    i++;
+                }
+                else if (sub == ":D"&& emojiCode == ":D")
+                {
+                    content.replace(i, 2, "😃");
+                    i++;
+                }
+                else if (sub == "<3" && emojiCode == "<3")
+                {
+                    content.replace(i, 2, "❤️");
+                    i++;
+                }
+            }
+        }
     }
+
 };
 
 // ========================
 //       CHAT CLASS (BASE)
 // ========================
-class Chat {
+class Chat
+{
 protected:
     vector<string> participants;
     vector<Message> messages;
     string chatName;
 
 public:
-    Chat() {
+    Chat()
+    {
         // TODO: Implement default constructor
     }
 
-    Chat(vector<string> users, string name) {
+    Chat(vector<string> users, string name)
+    {
         // TODO: Implement parameterized constructor
     }
 
-    void addMessage(const Message& msg) {
+    void addMessage(const Message& msg)
+    {
         // TODO: Implement message addition
     }
 
-    bool deleteMessage(int index, const string& username) {
+    bool deleteMessage(int index, const string& username)
+    {
         // TODO: Implement message deletion
         return false;
     }
 
-    virtual void displayChat() const {
+    virtual void displayChat() const
+    {
         // TODO: Implement chat display
     }
 
-    vector<Message> searchMessages(string keyword) const {
+    vector<Message> searchMessages(string keyword) const
+    {
         // TODO: Implement message search
         return {};
     }
 
-    void exportToFile(const string& filename) const {
+    void exportToFile(const string& filename) const
+    {
         // TODO: Implement export to file
     }
 };
@@ -192,21 +270,25 @@ public:
 // ========================
 //     PRIVATE CHAT CLASS
 // ========================
-class PrivateChat : public Chat {
+class PrivateChat : public Chat
+{
 private:
     string user1;
     string user2;
 
 public:
-    PrivateChat(string u1, string u2) {
+    PrivateChat(string u1, string u2)
+    {
         // TODO: Implement constructor
     }
 
-    void displayChat() const override {
+    void displayChat() const override
+    {
         // TODO: Implement private chat display
     }
 
-    void showTypingIndicator(const string& username) const {
+    void showTypingIndicator(const string& username) const
+    {
         // TODO: Implement typing indicator
     }
 };
@@ -214,44 +296,53 @@ public:
 // ========================
 //      GROUP CHAT CLASS
 // ========================
-class GroupChat : public Chat {
+class GroupChat : public Chat
+{
 private:
     vector<string> admins;
     string description;
 
 public:
-    GroupChat(vector<string> users, string name, string creator) {
+    GroupChat(vector<string> users, string name, string creator)
+    {
         // TODO: Implement constructor
     }
 
-    void addAdmin(string newAdmin) {
+    void addAdmin(string newAdmin)
+    {
         // TODO: Implement add admin
     }
 
-    bool removeParticipant(const string& admin, const string& userToRemove) {
+    bool removeParticipant(const string& admin, const string& userToRemove)
+    {
         // TODO: Implement remove participant
         return false;
     }
 
-    bool isAdmin(string username) const {
+    bool isAdmin(string username) const
+    {
         // TODO: Implement admin check
         return false;
     }
 
-    bool isParticipant(string username) const {
+    bool isParticipant(string username) const
+    {
         // TODO: Implement participant check
         return false;
     }
 
-    void setDescription(string desc) {
+    void setDescription(string desc)
+    {
         // TODO: Implement set description
     }
 
-    void displayChat() const override {
+    void displayChat() const override
+    {
         // TODO: Implement group chat display
     }
 
-    void sendJoinRequest(const string& username) {
+    void sendJoinRequest(const string& username)
+    {
         // TODO: Implement join request
     }
 };
@@ -259,23 +350,27 @@ public:
 // ========================
 //    WHATSAPP APP CLASS
 // ========================
-class WhatsApp {
+class WhatsApp
+{
 private:
     vector<User> users;
     vector<Chat*> chats;
     int currentUserIndex;
 
-    int findUserIndex(string username) const {
+    int findUserIndex(string username) const
+    {
         // TODO: Implement user search
         return -1;
     }
 
-    bool isLoggedIn() const {
+    bool isLoggedIn() const
+    {
         // TODO: Implement login check
         return false;
     }
 
-    string getCurrentUsername() const {
+    string getCurrentUsername() const
+    {
         // TODO: Implement get current user
         return "";
     }
@@ -283,33 +378,42 @@ private:
 public:
     WhatsApp() : currentUserIndex(-1) {}
 
-    void signUp() {
+    void signUp()
+    {
         // TODO: Implement user registration
     }
 
-    void login() {
+    void login()
+    {
         // TODO: Implement user login
     }
 
-    void startPrivateChat() {
+    void startPrivateChat()
+    {
         // TODO: Implement private chat creation
     }
 
-    void createGroup() {
+    void createGroup()
+    {
         // TODO: Implement group creation
     }
 
-    void viewChats() const {
+    void viewChats() const
+    {
         // TODO: Implement chat viewing
     }
 
-    void logout() {
+    void logout()
+    {
         // TODO: Implement logout
     }
 
-    void run() {
-        while (true) {
-            if (!isLoggedIn()) {
+    void run()
+    {
+        while (true)
+        {
+            if (!isLoggedIn())
+            {
                 cout << "\n1. Login\n2. Sign Up\n3. Exit\nChoice: ";
                 int choice;
                 cin >> choice;
@@ -318,7 +422,8 @@ public:
                 else if (choice == 2) signUp();
                 else if (choice == 3) break;
             }
-            else {
+            else
+            {
                 cout << "\n1. Start Private Chat\n2. Create Group\n3. View Chats\n4. Logout\nChoice: ";
                 int choice;
                 cin >> choice;
@@ -335,7 +440,10 @@ public:
 // ========================
 //          MAIN
 // ========================
-int main() {
+int main()
+{
+    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
     WhatsApp whatsapp;
     whatsapp.run();
     return 0;
