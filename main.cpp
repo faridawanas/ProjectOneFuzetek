@@ -82,20 +82,34 @@ private:
 public:
     Message() {
         // TODO: Implement default constructor
+        // all value are empty 
+        sender = "";
+        content = "";
+        timestamp = ""; 
+        status = "";
+        replyTo = nullptr;       
     }
 
     Message(string sndr, string cntnt) {
         // TODO: Implement parameterized constructor
+        sender = sndr;
+        content = cntnt; 
+        time_t curr_now = time(nullptr); // get current time from c time library and put it in time_t variable
+        timestamp = ctime(&curr_now); // // convert that number variable into a string and update the current timestamp to that timestmp
+        status = "sent"; // current status is sent 
+        replyTo = nullptr;  // reply to null 
+
     }
 
     string getContent() const {
         // TODO: Implement getter
-        return "";
+
+        return content;
     }
 
     string getSender() const {
         // TODO: Implement getter
-        return "";
+        return sender;
     }
 
     string getTimestamp() const {
@@ -123,6 +137,8 @@ public:
 
     void updateTimestamp() {
         // TODO: Implement timestamp update
+        time_t curr_now = time(nullptr); // get current time from c time library and put it in time_t variable
+        timestamp = ctime(&curr_now); // convert that number variable into a string and update the current timestamp to that timestmp
     }
 
     void display() const {
