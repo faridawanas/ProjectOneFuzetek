@@ -3,6 +3,9 @@
 #include <string>
 #include <ctime>
 #include <windows.h>
+#include <algorithm> // For std::all_of
+#include <cctype> // For std::isdigit
+
 using namespace std;
 
 // ========================
@@ -20,24 +23,30 @@ private:
 public:
     User()
     {
-        // TODO: Implement default constructor
+        this->username = "";
+        this->password = "";
+        this->phoneNumber = "";
+        this->status = "Available";
+        updateLastSeen();
     }
 
     User(string uname, string pwd, string phone)
     {
-        // TODO: Implement parameterized constructor
+        this->username = uname;
+        this->status = "Available";
+        setPhoneNumber(phone);
+        changePassword(pwd);
+        updateLastSeen();
     }
 
     string getUsername() const
     {
-        // TODO: Implement getter
-        return "";
+        return this->username;
     }
 
     string getPhoneNumber() const
     {
-        // TODO: Implement getter
-        return "";
+        return this->phoneNumber;
     }
 
     string getStatus() const
@@ -55,11 +64,6 @@ public:
         status = newStatus;
     }
 
-    void setPhoneNumber(string phone)
-    {
-        // TODO: Implement setter
-    }
-
     void updateLastSeen()
     {
         time_t now = time(nullptr);
@@ -70,15 +74,43 @@ public:
         }
     }
 
+    void setPhoneNumber(string phone)
+    {
+        if (phone.empty())
+        {
+            return;
+        }
+        // Exit early if the phone number is '+' only or empty
+        int start = (phone[0] == '+') ? 1 : 0;
+        if (start == static_cast<int>(phone.size()))
+        {
+            return;
+        }
+        // Check if all characters after the optional '+' are digits
+        // uses a lambda function to check if each character is a digit using the isdigit function from <cctype>
+        bool isValid = all_of(phone.begin() + start, phone.end(), [](unsigned char ch)
+        {
+            return isdigit(ch);
+        });
+
+        if (isValid)
+        {
+            this->phoneNumber = phone;
+        }
+    }
+
+
     bool checkPassword(string pwd) const
     {
-        // TODO: Implement password check
-        return false;
+        return this->password == pwd;
     }
 
     void changePassword(string newPwd)
     {
-        // TODO: Implement password change
+        if (newPwd.length() > 6)
+        {
+            this->password = newPwd;
+        }
     }
 };
 
@@ -173,7 +205,7 @@ public:
         if (replyTo != nullptr)
         {
             cout << "Replying to: " << endl;
-            cout << replyTo->getSender() << ": \"" << replyTo->getContent() << "\"" << endl;
+            cout << "\t" << replyTo->getSender() << ": \"" << replyTo->getContent() << "\"" << endl;
         }
         cout << "Message:\t\"" << content << "\"" << endl;
 
