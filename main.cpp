@@ -102,21 +102,19 @@ public:
     }
 
     string getStatus() const {
-        // TODO: Implement getter
-        return "";
+        return this->status;
     }
 
     Message* getReplyTo() const {
-        // TODO: Implement getter
-        return nullptr;
+        return this->replyTo;
     }
 
     void setStatus(string newStatus) {
-        // TODO: Implement setter
+        this->status = newStatus;
     }
 
     void setReplyTo(Message* msg) {
-        // TODO: Implement setter
+        this->replyTo = msg;
     }
 
     void updateTimestamp() {
