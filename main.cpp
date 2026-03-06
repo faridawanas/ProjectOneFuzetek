@@ -328,7 +328,11 @@ private:
 public:
     PrivateChat(string u1, string u2)
     {
-        // TODO: Implement constructor
+        user1 = u1;
+        user2 = u2;
+        chatName = u1 + " & " + u2;
+        participants.push_back(u1);
+        participants.push_back(u2);
     }
 
     void displayChat() const override
@@ -340,7 +344,7 @@ public:
 
     void showTypingIndicator(const string& username) const
     {
-        // TODO: Implement typing indicator
+        cout << username << " is typing..." << endl;
     }
 };
 
