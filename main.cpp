@@ -6,13 +6,9 @@
 #include <windows.h>
 #endif
 #include <algorithm> // For std::all_of
-<<<<<<< HEAD
-#include <cctype> // For std::isdigit
-#include <fstream> // For file handling
-=======
 #include <cctype>    // For std::isdigit
 #include <fstream>   // For file handling
->>>>>>> origin/karim
+
 using namespace std;
 
 // ========================
@@ -309,11 +305,9 @@ public:
     vector<Message> searchMessages(string keyword) const
     {
         vector<Message> results;
-<<<<<<< HEAD
-        for (const auto& msg : messages)
-=======
+
         for (const auto &msg : messages)
->>>>>>> origin/karim
+
         {
             if (msg.getContent().find(keyword) != string::npos)
             {
@@ -327,11 +321,8 @@ public:
     {
         string filename = filename + ".txt";
         ofstream outFile(filename);
-<<<<<<< HEAD
-        for (const auto& msg : messages)
-=======
         for (const auto &msg : messages)
->>>>>>> origin/karim
+
         {
             outFile << msg.getContent() << endl;
         }
