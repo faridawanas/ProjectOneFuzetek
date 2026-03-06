@@ -7,8 +7,13 @@
 #endif
 #include <algorithm> // For std::all_of
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 #include <cctype> // For std::isdigit
 
+=======
+#include <cctype>    // For std::isdigit
+#include <fstream>   // For file handling
+>>>>>>> Stashed changes
 =======
 #include <cctype>    // For std::isdigit
 #include <fstream>   // For file handling
