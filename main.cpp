@@ -333,6 +333,8 @@ class GroupChat : public Chat
 private:
     vector<string> admins;
     string description;
+    vector<string> joinRequests; // a waitlist for users that needs admins aproving to join the chat 
+
 
 public:
     GroupChat(vector<string> users, string name, string creator)
@@ -343,11 +345,18 @@ public:
     void addAdmin(string newAdmin)
     {
         // TODO: Implement add admin
+        admins.push_back(newAdmin) // add the newAdmin to the admins vector 
     }
 
     bool removeParticipant(const string& admin, const string& userToRemove)
     {
+  
         // TODO: Implement remove participant
+        if (isAdmin(admin)){ // use the isAdmin methods to check if an admin is in the admins list 
+
+            participants.erase(std::remove(participants.begin(), participants.end(), userToRemove), participants.end()); // remove the usertoremove from the participants list using erase.remove method
+            return true;
+        }
         return false;
     }
 
@@ -376,6 +385,11 @@ public:
     void sendJoinRequest(const string& username)
     {
         // TODO: Implement join request
+            // check if the username is not in participants list
+            if (!isParticipant(username)){
+
+                joinRequests.push_back(username) // add the username to the participants vector 
+            }
     }
 };
 
