@@ -2,10 +2,17 @@
 #include <vector>
 #include <string>
 #include <ctime>
+#ifdef _WIN32 // Check if the code is being compiled on a Windows platform to include windows.h for console code page settings
 #include <windows.h>
+#endif
 #include <algorithm> // For std::all_of
+<<<<<<< Updated upstream
 #include <cctype> // For std::isdigit
 
+=======
+#include <cctype>    // For std::isdigit
+#include <fstream>   // For file handling
+>>>>>>> Stashed changes
 using namespace std;
 
 // ========================
@@ -89,16 +96,13 @@ public:
         // Check if all characters after the optional '+' are digits
         // uses a lambda function to check if each character is a digit using the isdigit function from <cctype>
         bool isValid = all_of(phone.begin() + start, phone.end(), [](unsigned char ch)
-        {
-            return isdigit(ch);
-        });
+                              { return isdigit(ch); });
 
         if (isValid)
         {
             this->phoneNumber = phone;
         }
     }
-
 
     bool checkPassword(string pwd) const
     {
@@ -124,7 +128,7 @@ private:
     string content;
     string timestamp;
     string status;
-    Message* replyTo;
+    Message *replyTo;
 
 public:
     Message()
@@ -144,10 +148,9 @@ public:
         sender = sndr;
         content = cntnt;
         time_t curr_now = time(nullptr); // get current time from c time library and put it in time_t variable
-        timestamp = ctime(&curr_now); // // convert that number variable into a string and update the current timestamp to that timestmp
-        status = "sent"; // current status is sent
-        replyTo = nullptr;  // reply to null
-
+        timestamp = ctime(&curr_now);    // convert that number variable into a string and update the current timestamp to that timestmp
+        status = "sent";                 // current status is sent
+        replyTo = nullptr;               // reply to null
     }
 
     string getContent() const
@@ -174,7 +177,7 @@ public:
         return this->status;
     }
 
-    Message* getReplyTo() const
+    Message *getReplyTo() const
     {
         return this->replyTo;
     }
@@ -184,21 +187,21 @@ public:
         this->status = newStatus;
     }
 
-    void setReplyTo(Message* msg)
+    void setReplyTo(Message *msg)
     {
         this->replyTo = msg;
     }
 
     void updateTimestamp()
     {
-        // TODO: Implement timestamp update
+        // timestamp update
         time_t curr_now = time(nullptr); // get current time from c time library and put it in time_t variable
-        timestamp = ctime(&curr_now); // convert that number variable into a string and update the current timestamp to that timestmp
+        timestamp = ctime(&curr_now);    // convert that number variable into a string and update the current timestamp to that timestmp
     }
 
     void display() const
     {
-        // TODO: Implement message display
+        // message display
         cout << "From: " << sender << endl;
         cout << "Time: " << timestamp << endl;
         cout << "Status: " << status << endl;
@@ -208,12 +211,11 @@ public:
             cout << "\t" << replyTo->getSender() << ": \"" << replyTo->getContent() << "\"" << endl;
         }
         cout << "Message:\t\"" << content << "\"" << endl;
-
     }
 
     void addEmoji(string emojiCode)
     {
-        // TODO: Implement emoji support
+        // emoji support
         for (int i = 0; i < content.size(); i++)
         {
             if (i + 10 <= content.size() && content.compare(i, 10, ":thumbsup:") == 0 && emojiCode == ":thumbsup:")
@@ -234,7 +236,7 @@ public:
                     content.replace(i, 2, "😢");
                     i++;
                 }
-                else if (sub == ":D"&& emojiCode == ":D")
+                else if (sub == ":D" && emojiCode == ":D")
                 {
                     content.replace(i, 2, "😃");
                     i++;
@@ -247,7 +249,6 @@ public:
             }
         }
     }
-
 };
 
 // ========================
@@ -263,23 +264,37 @@ protected:
 public:
     Chat()
     {
-        // TODO: Implement default constructor
+        participants.clear();
+        messages.clear();
+        chatName = "";
     }
 
     Chat(vector<string> users, string name)
     {
-        // TODO: Implement parameterized constructor
+        participants = users;
+        messages.clear();
+        chatName = name;
     }
 
-    void addMessage(const Message& msg)
+    void addMessage(const Message &msg)
     {
-        // TODO: Implement message addition
+        messages.push_back(msg);
     }
 
-    bool deleteMessage(int index, const string& username)
+    bool deleteMessage(int index, const string &username)
     {
-        // TODO: Implement message deletion
-        return false;
+        if (index < 0 || index >= static_cast<int>(messages.size())) // Check if index is out of bounds
+        {
+            return false;
+        }
+
+        if (messages[index].getSender() != username) // Check if the user is the sender of the message
+        {
+            return false;
+        }
+
+        messages.erase(messages.begin() + index);
+        return true;
     }
 
     virtual void displayChat() const
@@ -289,13 +304,35 @@ public:
 
     vector<Message> searchMessages(string keyword) const
     {
+<<<<<<< Updated upstream
         // TODO: Implement message search
         return {};
+=======
+        vector<Message> results;
+        for (const auto &msg : messages)
+        {
+            if (msg.getContent().find(keyword) != string::npos)
+            {
+                results.push_back(msg);
+            }
+        }
+        return results;
+>>>>>>> Stashed changes
     }
 
-    void exportToFile(const string& filename) const
+    void exportToFile(const string &filename) const
     {
+<<<<<<< Updated upstream
         // TODO: Implement export to file
+=======
+        string filename = filename + ".txt";
+        ofstream outFile(filename);
+        for (const auto &msg : messages)
+        {
+            outFile << msg.getContent() << endl;
+        }
+        outFile.close();
+>>>>>>> Stashed changes
     }
 };
 
@@ -319,7 +356,7 @@ public:
         // TODO: Implement private chat display
     }
 
-    void showTypingIndicator(const string& username) const
+    void showTypingIndicator(const string &username) const
     {
         // TODO: Implement typing indicator
     }
@@ -345,7 +382,7 @@ public:
         // TODO: Implement add admin
     }
 
-    bool removeParticipant(const string& admin, const string& userToRemove)
+    bool removeParticipant(const string &admin, const string &userToRemove)
     {
         // TODO: Implement remove participant
         return false;
@@ -373,7 +410,7 @@ public:
         // TODO: Implement group chat display
     }
 
-    void sendJoinRequest(const string& username)
+    void sendJoinRequest(const string &username)
     {
         // TODO: Implement join request
     }
@@ -386,7 +423,7 @@ class WhatsApp
 {
 private:
     vector<User> users;
-    vector<Chat*> chats;
+    vector<Chat *> chats;
     int currentUserIndex;
 
     int findUserIndex(string username) const
@@ -450,9 +487,12 @@ public:
                 int choice;
                 cin >> choice;
 
-                if (choice == 1) login();
-                else if (choice == 2) signUp();
-                else if (choice == 3) break;
+                if (choice == 1)
+                    login();
+                else if (choice == 2)
+                    signUp();
+                else if (choice == 3)
+                    break;
             }
             else
             {
@@ -460,10 +500,14 @@ public:
                 int choice;
                 cin >> choice;
 
-                if (choice == 1) startPrivateChat();
-                else if (choice == 2) createGroup();
-                else if (choice == 3) viewChats();
-                else if (choice == 4) logout();
+                if (choice == 1)
+                    startPrivateChat();
+                else if (choice == 2)
+                    createGroup();
+                else if (choice == 3)
+                    viewChats();
+                else if (choice == 4)
+                    logout();
             }
         }
     }
@@ -474,8 +518,10 @@ public:
 // ========================
 int main()
 {
+#ifdef _WIN32 // Check if the code is being compiled on a Windows platform to set the console code page to UTF-8 for proper emoji display
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(CP_UTF8);
+#endif
     WhatsApp whatsapp;
     whatsapp.run();
     return 0;
