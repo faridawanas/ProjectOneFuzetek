@@ -345,7 +345,10 @@ public:
     void addAdmin(string newAdmin)
     {
         // TODO: Implement add admin
-        admins.push_back(newAdmin) // add the newAdmin to the admins vector 
+        if (!isAdmin(newAdmin)) 
+        {          // ✅ prevent duplicates
+        admins.push_back(newAdmin);
+        }
     }
 
     bool removeParticipant(const string& admin, const string& userToRemove)
@@ -386,7 +389,8 @@ public:
     {
         // TODO: Implement join request
             // check if the username is not in participants list
-            if (!isParticipant(username)){
+            if (!isParticipant(username))
+            {
 
                 joinRequests.push_back(username) // add the username to the participants vector 
             }
