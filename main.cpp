@@ -5,7 +5,7 @@
 #include <windows.h>
 #include <algorithm> // For std::all_of
 #include <cctype> // For std::isdigit
-
+#include <fstream> // For file handling
 using namespace std;
 
 // ========================
@@ -289,13 +289,26 @@ public:
 
     vector<Message> searchMessages(string keyword) const
     {
-        // TODO: Implement message search
-        return {};
+        vector<Message> results;
+        for (const auto& msg : messages)
+        {
+            if (msg.getContent().find(keyword) != string::npos)
+            {
+                results.push_back(msg);
+            }
+        }
+        return results;
     }
 
     void exportToFile(const string& filename) const
     {
-        // TODO: Implement export to file
+        string filename = filename + ".txt";
+        ofstream outFile(filename);
+        for (const auto& msg : messages)
+        {
+            outFile << msg.getContent() << endl;
+        }
+        outFile.close();
     }
 };
 
