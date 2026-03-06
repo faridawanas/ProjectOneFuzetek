@@ -6,23 +6,8 @@
 #include <windows.h>
 #endif
 #include <algorithm> // For std::all_of
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-<<<<<<< Updated upstream
-#include <cctype> // For std::isdigit
-
-=======
 #include <cctype>    // For std::isdigit
 #include <fstream>   // For file handling
->>>>>>> Stashed changes
-=======
-#include <cctype>    // For std::isdigit
-#include <fstream>   // For file handling
->>>>>>> Stashed changes
-=======
-#include <cctype>    // For std::isdigit
-#include <fstream>   // For file handling
->>>>>>> Stashed changes
 using namespace std;
 
 // ========================
@@ -314,10 +299,6 @@ public:
 
     vector<Message> searchMessages(string keyword) const
     {
-<<<<<<< Updated upstream
-        // TODO: Implement message search
-        return {};
-=======
         vector<Message> results;
         for (const auto &msg : messages)
         {
@@ -327,14 +308,10 @@ public:
             }
         }
         return results;
->>>>>>> Stashed changes
     }
 
     void exportToFile(const string &filename) const
     {
-<<<<<<< Updated upstream
-        // TODO: Implement export to file
-=======
         string filename = filename + ".txt";
         ofstream outFile(filename);
         for (const auto &msg : messages)
@@ -342,7 +319,6 @@ public:
             outFile << msg.getContent() << endl;
         }
         outFile.close();
->>>>>>> Stashed changes
     }
 };
 
