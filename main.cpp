@@ -285,6 +285,10 @@ public:
     virtual void displayChat() const
     {
         // TODO: Implement chat display
+        for(int i = 0 ; i < messages.size() ; i++)
+        {
+            messages[i].display();
+        }
     }
 
     vector<Message> searchMessages(string keyword) const
@@ -317,6 +321,8 @@ public:
     void displayChat() const override
     {
         // TODO: Implement private chat display
+        cout << "Private Chat between " << user1 << " and " << user2 << endl;
+        Chat::displayChat();
     }
 
     void showTypingIndicator(const string& username) const
@@ -338,6 +344,10 @@ public:
     GroupChat(vector<string> users, string name, string creator)
     {
         // TODO: Implement constructor
+        participants = users;
+        chatName = name;
+        admins.push_back(creator);
+        description = ";"
     }
 
     void addAdmin(string newAdmin)
@@ -354,6 +364,10 @@ public:
     bool isAdmin(string username) const
     {
         // TODO: Implement admin check
+        for (int i = 0 ; i<admins.size() ; i++)
+        {
+            if(username == admins[i]) return true;
+        }
         return false;
     }
 
@@ -366,11 +380,20 @@ public:
     void setDescription(string desc)
     {
         // TODO: Implement set description
+        description = desc;
     }
 
     void displayChat() const override
     {
         // TODO: Implement group chat display
+        cout << "Group Chat: " << chatName << endl;
+        cout << "Participants: " ;
+        for (int i = 0 ; i<participants.size() ; i++)
+        {
+            cout << participants[i] << " ";
+        }
+        cout << endl;
+        Chat::displayChat();
     }
 
     void sendJoinRequest(const string& username)
