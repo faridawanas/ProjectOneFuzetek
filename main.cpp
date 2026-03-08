@@ -92,7 +92,9 @@ public:
         // Check if all characters after the optional '+' are digits
         // uses a lambda function to check if each character is a digit using the isdigit function from <cctype>
         bool isValid = all_of(phone.begin() + start, phone.end(), [](unsigned char ch)
-                              { return isdigit(ch); });
+        {
+            return isdigit(ch);
+        });
 
         if (isValid)
         {
@@ -319,8 +321,8 @@ public:
 
     void exportToFile(const string &filename) const
     {
-        string filename = filename + ".txt";
-        ofstream outFile(filename);
+        string name = filename + ".txt";
+        ofstream outFile(name);
         for (const auto &msg : messages)
 
         {
@@ -387,8 +389,9 @@ public:
     {
         // TODO: Implement add admin
         if (!isAdmin(newAdmin))
-        {          //prevent duplicates
-        admins.push_back(newAdmin);
+        {
+            //prevent duplicates
+            admins.push_back(newAdmin);
         }
     }
 
@@ -396,7 +399,8 @@ public:
     {
 
         // TODO: Implement remove participant
-        if (isAdmin(admin)){ // use the isAdmin methods to check if an admin is in the admins list
+        if (isAdmin(admin))  // use the isAdmin methods to check if an admin is in the admins list
+        {
 
             participants.erase(std::remove(participants.begin(), participants.end(), userToRemove), participants.end()); // remove the usertoremove from the participants list using erase.remove method
             return true;
@@ -442,12 +446,11 @@ public:
     void sendJoinRequest(const string &username)
     {
         // TODO: Implement join request
-            // check if the username is not in participants list
-            if (!isParticipant(username))
-            {
-
-                joinRequests.push_back(username); // add the username to the participants vector
-            }
+        // check if the username is not in participants list
+        if (!isParticipant(username))
+        {
+            joinRequests.push_back(username); // add the username to the participants vector
+        }
     }
 };
 
@@ -466,7 +469,7 @@ private:
         // TODO: Implement user search
         for (int i = 0 ; i < users.size();i++){
 
-            if (users[i].getUsername() == username) 
+            if (users[i].getUsername() == username)
             {
                 return i;
             }
@@ -478,13 +481,13 @@ private:
     bool isLoggedIn() const
     {
         // TODO: Implement login check
-        return false;
+        return currentUserIndex != -1;;
     }
 
     string getCurrentUsername() const
     {
         // TODO: Implement get current user
-        // saftey check 
+        // saftey check
             if (currentUserIndex == -1) {
                    return "";
             }
@@ -497,6 +500,31 @@ public:
     void signUp()
     {
         // TODO: Implement user registration
+        string name, phone, password="";
+        int flag = 0;
+        while(flag == 0){
+            cout << "Enter your username: ";
+            cin >> name;
+            flag = 1;
+            for(User u : users)
+            {
+                if(name == u.getUsername())
+                {
+                    cout << "Username already exists"<<endl;
+                    flag = 0;
+                }
+
+            }
+        }
+        cout << "Enter your phone number: ";
+        cin >> phone;
+        while (password.size() <= 6)
+        {
+            cout << "Enter a password(length > 6): ";
+            cin >> password;
+        }
+        User u(name, password, phone);
+        users.push_back(u);
     }
 
     void login()
@@ -509,7 +537,7 @@ public:
         cout << "please enter username:"<<endl;
         cin >> log_username;
         cout << "please enter password:"<<endl;
-        cin >> log_pass;     
+        cin >> log_pass;
         // search for index of user trying to log in the users databse
         log_indx =  findUserIndex(log_username);
         // check these credintials against the database if not print error you need to register again
@@ -520,13 +548,13 @@ public:
         // found the user
         else {
             // check password against the user password
-            // if the password do not exist 
+            // if the password do not exist
             if (!users[log_indx].checkPassword(log_pass)) {
                 cout << "password is not correct"<<endl;
             }
             else {
             // if yes  set current index to that logged in user index
-                
+
                 currentUserIndex = log_indx;
                 cout << "user logged in succesfully"<<endl ;
 
@@ -553,6 +581,8 @@ public:
     void logout()
     {
         // TODO: Implement logout
+        currentUserIndex = -1;
+        cout << "Logged out successfull." << endl;
     }
 
     void run()
