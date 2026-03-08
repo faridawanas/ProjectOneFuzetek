@@ -92,7 +92,9 @@ public:
         // Check if all characters after the optional '+' are digits
         // uses a lambda function to check if each character is a digit using the isdigit function from <cctype>
         bool isValid = all_of(phone.begin() + start, phone.end(), [](unsigned char ch)
-                              { return isdigit(ch); });
+        {
+            return isdigit(ch);
+        });
 
         if (isValid)
         {
@@ -319,8 +321,8 @@ public:
 
     void exportToFile(const string &filename) const
     {
-        string filename = filename + ".txt";
-        ofstream outFile(filename);
+        string name = filename + ".txt";
+        ofstream outFile(name);
         for (const auto &msg : messages)
 
         {
@@ -380,15 +382,16 @@ public:
         participants = users;
         chatName = name;
         admins.push_back(creator);
-        description = ";"
+        description = ";";
     }
 
     void addAdmin(string newAdmin)
     {
         // TODO: Implement add admin
         if (!isAdmin(newAdmin))
-        {          //prevent duplicates
-        admins.push_back(newAdmin);
+        {
+            //prevent duplicates
+            admins.push_back(newAdmin);
         }
     }
 
@@ -396,7 +399,8 @@ public:
     {
 
         // TODO: Implement remove participant
-        if (isAdmin(admin)){ // use the isAdmin methods to check if an admin is in the admins list
+        if (isAdmin(admin))  // use the isAdmin methods to check if an admin is in the admins list
+        {
 
             participants.erase(std::remove(participants.begin(), participants.end(), userToRemove), participants.end()); // remove the usertoremove from the participants list using erase.remove method
             return true;
@@ -442,12 +446,12 @@ public:
     void sendJoinRequest(const string &username)
     {
         // TODO: Implement join request
-            // check if the username is not in participants list
-            if (!isParticipant(username))
-            {
+        // check if the username is not in participants list
+        if (!isParticipant(username))
+        {
 
-                joinRequests.push_back(username) // add the username to the participants vector
-            }
+            joinRequests.push_back(username); // add the username to the participants vector
+        }
     }
 };
 
@@ -485,6 +489,31 @@ public:
     void signUp()
     {
         // TODO: Implement user registration
+        string name, phone, password="";
+        int flag = 0;
+        while(flag == 0){
+            cout << "Enter your username: ";
+            cin >> name;
+            flag = 1;
+            for(User u : users)
+            {
+                if(name == u.getUsername())
+                {
+                    cout << "Username already exists"<<endl;
+                    flag = 0;
+                }
+
+            }
+        }
+        cout << "Enter your phone number: ";
+        cin >> phone;
+        while (password.size() <= 6)
+        {
+            cout << "Enter a password(length > 6): ";
+            cin >> password;
+        }
+        User u(name, password, phone);
+        users.push_back(u);
     }
 
     void login()
@@ -510,6 +539,8 @@ public:
     void logout()
     {
         // TODO: Implement logout
+        currentUserIndex = -1;
+        cout << "Logged out successfull." << endl;
     }
 
     void run()
