@@ -380,7 +380,7 @@ public:
         participants = users;
         chatName = name;
         admins.push_back(creator);
-        description = ";"
+        description = ";";
     }
 
     void addAdmin(string newAdmin)
@@ -446,7 +446,7 @@ public:
             if (!isParticipant(username))
             {
 
-                joinRequests.push_back(username) // add the username to the participants vector
+                joinRequests.push_back(username); // add the username to the participants vector
             }
     }
 };
@@ -464,6 +464,14 @@ private:
     int findUserIndex(string username) const
     {
         // TODO: Implement user search
+        for (int i = 0 ; i < users.size();i++){
+
+            if (users[i].getUsername() == username) 
+            {
+                return i;
+            }
+        }
+
         return -1;
     }
 
@@ -476,7 +484,11 @@ private:
     string getCurrentUsername() const
     {
         // TODO: Implement get current user
-        return "";
+        // saftey check 
+            if (currentUserIndex == -1) {
+                   return "";
+            }
+        return users[currentUserIndex].getUsername();
     }
 
 public:
@@ -489,7 +501,38 @@ public:
 
     void login()
     {
+        string log_username;
+        string log_pass;
+        int log_indx;
         // TODO: Implement user login
+        // Get user credntials  username and password
+        cout << "please enter username:"<<endl;
+        cin >> log_username;
+        cout << "please enter password:"<<endl;
+        cin >> log_pass;     
+        // search for index of user trying to log in the users databse
+        log_indx =  findUserIndex(log_username);
+        // check these credintials against the database if not print error you need to register again
+        // not found the user
+        if (log_indx ==-1){
+            cout << "username does not exist";
+        }
+        // found the user
+        else {
+            // check password against the user password
+            // if the password do not exist 
+            if (!users[log_indx].checkPassword(log_pass)) {
+                cout << "password is not correct"<<endl;
+            }
+            else {
+            // if yes  set current index to that logged in user index
+                
+                currentUserIndex = log_indx;
+                cout << "user logged in succesfully"<<endl ;
+
+            }
+        }
+
     }
 
     void startPrivateChat()
