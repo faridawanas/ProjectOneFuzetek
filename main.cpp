@@ -495,11 +495,21 @@ public:
     void startPrivateChat()
     {
         // TODO: Implement private chat creation
+        string OTHERUSER;
+        cout << "Enter the name of the other user: ";
+        cin >> OTHERUSER;
+        PrivateChat *newChat = new PrivateChat(getCurrentUsername(),OTHERUSER);
+        chats.push_back(newChat);
     }
 
     void createGroup()
     {
         // TODO: Implement group creation
+        string GroupName;
+        cout << "Enter a name for the group: ";
+        cin >> GroupName;
+        GroupChat *newChat = new GroupChat(vector<User>(),GroupName,getCurrentUsername());
+        chats.push_back(newChat);
     }
 
     void viewChats() const
