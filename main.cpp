@@ -2,12 +2,12 @@
 #include <vector>
 #include <string>
 #include <ctime>
-#ifdef _WIN32 // Check if the code is being compiled on a Windows platform to include windows.h for console code page settings
+#ifdef _WIN32
 #include <windows.h>
 #endif
-#include <algorithm> // For std::all_of
-#include <cctype>    // For std::isdigit
-#include <fstream>   // For file handling
+#include <algorithm>
+#include <cctype>
+#include <fstream>
 
 using namespace std;
 
@@ -90,7 +90,6 @@ public:
             return;
         }
         // Check if all characters after the optional '+' are digits
-        // uses a lambda function to check if each character is a digit using the isdigit function from <cctype>
         bool isValid = all_of(phone.begin() + start, phone.end(), [](unsigned char ch)
         {
             return isdigit(ch);
@@ -413,7 +412,7 @@ public:
         if (isAdmin(admin) && isParticipant(userToRemove))  // use the isAdmin methods to check if an admin is in the admins list
         {
 
-            participants.erase(std::remove(participants.begin(), participants.end(), userToRemove), participants.end()); // remove the usertoremove from the participants list using erase.remove method
+            participants.erase(std::remove(participants.begin(), participants.end(), userToRemove), participants.end());
             return true;
         }
         return false;
@@ -668,7 +667,6 @@ public:
                 }
             }
         }
-        //participants.push_back(getCurrentUsername());
         GroupChat *newChat = new GroupChat(participants,GroupName,getCurrentUsername());
         chats.push_back(newChat);
 
@@ -732,8 +730,6 @@ public:
 
         while(true)
         {
-            //cout << "\n------------- CHAT -------------\n";
-            //selectedChat->displayChat();
 
             cout << "\n1. Send Message\n";
             cout << "2. Search Messages\n";
@@ -916,7 +912,7 @@ public:
 // ========================
 int main()
 {
-#ifdef _WIN32 // Check if the code is being compiled on a Windows platform to set the console code page to UTF-8 for proper emoji display
+#ifdef _WIN32
     SetConsoleOutputCP(CP_UTF8);
     SetConsoleCP(CP_UTF8);
 #endif
