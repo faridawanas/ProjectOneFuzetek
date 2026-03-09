@@ -1,0 +1,11 @@
+# depslib dependency file v1.0
+1773077242 source:d:\fuzetek\projectone\main.cpp
+	<iostream>
+	<vector>
+	<string>
+	<ctime>
+	<windows.h>
+	<algorithm>
+	<cctype>
+	<fstream>
+

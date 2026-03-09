@@ -154,7 +154,6 @@ public:
     string getContent() const
     {
         // TODO: Implement getter
-
         return content;
     }
 
@@ -200,7 +199,7 @@ public:
     void display() const
     {
         // message display
-        cout << "From: " << sender << endl;
+        cout << "\nFrom: " << sender << endl;
         cout << "Time: " << timestamp << endl;
         cout << "Status: " << status << endl;
         if (replyTo != nullptr)
@@ -274,6 +273,17 @@ public:
         chatName = name;
     }
 
+
+    bool isParticipant(string username) const
+    {
+        // TODO: Implement participant check
+        for (string p : participants)
+        {
+            if (p == username) return true;
+        }
+        return false;
+    }
+
     void addMessage(const Message &msg)
     {
         messages.push_back(msg);
@@ -300,6 +310,7 @@ public:
         // TODO: Implement chat display
         for(int i = 0 ; i < messages.size() ; i++)
         {
+            cout << "\nMessage #" << i << endl;
             messages[i].display();
         }
     }
@@ -354,7 +365,7 @@ public:
     void displayChat() const override
     {
         // TODO: Implement private chat display
-        cout << "Private Chat between " << user1 << " and " << user2 << endl;
+        cout << "-------------Private Chat between " << user1 << " and " << user2 <<"-------------"<< endl;
         Chat::displayChat();
     }
 
@@ -399,7 +410,7 @@ public:
     {
 
         // TODO: Implement remove participant
-        if (isAdmin(admin))  // use the isAdmin methods to check if an admin is in the admins list
+        if (isAdmin(admin) && isParticipant(userToRemove))  // use the isAdmin methods to check if an admin is in the admins list
         {
 
             participants.erase(std::remove(participants.begin(), participants.end(), userToRemove), participants.end()); // remove the usertoremove from the participants list using erase.remove method
@@ -418,11 +429,7 @@ public:
         return false;
     }
 
-    bool isParticipant(string username) const
-    {
-        // TODO: Implement participant check
-        return false;
-    }
+
 
     void setDescription(string desc)
     {
@@ -433,7 +440,7 @@ public:
     void displayChat() const override
     {
         // TODO: Implement group chat display
-        cout << "Group Chat: " << chatName << endl;
+        cout << "------------Group Chat: " << chatName <<"-----------------"<< endl;
         cout << "Participants: " ;
         for (int i = 0 ; i<participants.size() ; i++)
         {
@@ -467,7 +474,8 @@ private:
     int findUserIndex(string username) const
     {
         // TODO: Implement user search
-        for (int i = 0 ; i < users.size();i++){
+        for (int i = 0 ; i < users.size(); i++)
+        {
 
             if (users[i].getUsername() == username)
             {
@@ -481,16 +489,17 @@ private:
     bool isLoggedIn() const
     {
         // TODO: Implement login check
-        return currentUserIndex != -1;;
+        return currentUserIndex != -1;
     }
 
     string getCurrentUsername() const
     {
         // TODO: Implement get current user
         // saftey check
-            if (currentUserIndex == -1) {
-                   return "";
-            }
+        if (currentUserIndex == -1)
+        {
+            return "";
+        }
         return users[currentUserIndex].getUsername();
     }
 
@@ -502,7 +511,8 @@ public:
         // TODO: Implement user registration
         string name, phone, password="";
         int flag = 0;
-        while(flag == 0){
+        while(flag == 0)
+        {
             cout << "Enter your username: ";
             cin >> name;
             flag = 1;
@@ -525,6 +535,7 @@ public:
         }
         User u(name, password, phone);
         users.push_back(u);
+        cout << " User created, can login with credentials";
     }
 
     void login()
@@ -542,18 +553,22 @@ public:
         log_indx =  findUserIndex(log_username);
         // check these credintials against the database if not print error you need to register again
         // not found the user
-        if (log_indx ==-1){
+        if (log_indx ==-1)
+        {
             cout << "username does not exist";
         }
         // found the user
-        else {
+        else
+        {
             // check password against the user password
             // if the password do not exist
-            if (!users[log_indx].checkPassword(log_pass)) {
+            if (!users[log_indx].checkPassword(log_pass))
+            {
                 cout << "password is not correct"<<endl;
             }
-            else {
-            // if yes  set current index to that logged in user index
+            else
+            {
+                // if yes  set current index to that logged in user index
 
                 currentUserIndex = log_indx;
                 cout << "user logged in succesfully"<<endl ;
@@ -566,16 +581,281 @@ public:
     void startPrivateChat()
     {
         // TODO: Implement private chat creation
+        string OTHERUSER;
+        cout << "Enter the name of the other user: ";
+        cin >> OTHERUSER;
+        int flag = 0;
+        for(User u : users)
+        {
+            if(u.getUsername() == OTHERUSER)
+            {
+                flag = 1;
+                PrivateChat *newChat = new PrivateChat(getCurrentUsername(),OTHERUSER);
+                chats.push_back(newChat);
+                cin.ignore();
+                string m;
+                cout << "Chat with " << OTHERUSER << endl;
+                cout << "\nEnter your message(enter \"exit\" to close the chat): ";
+                getline(cin, m);
+                while(m != "exit")
+                {
+                    Message mes(getCurrentUsername(), m);
+                    mes.addEmoji(":)");
+                    mes.addEmoji(":(");
+                    mes.addEmoji("<3");
+                    mes.addEmoji(":thumbsup:");
+                    mes.addEmoji(":D");
+                    newChat->addMessage(mes);
+                    mes.display();
+                    cout << "\nEnter your message(enter \"exit\" to close the chat): ";
+                    getline(cin, m);
+
+                }
+                break;
+            }
+        }
+        if (flag ==0 )
+        {
+            cout << "User not found";
+        }
     }
 
     void createGroup()
     {
         // TODO: Implement group creation
+        string GroupName;
+        cout << "Enter a name for the group: ";
+        cin >> GroupName;
+        vector <string> participants;
+        string x;
+        int z, n=0;
+        while(n < 2)
+        {
+            cout << "Enter number of participants(must be > 1): ";
+            cin >> n;
+        }
+        participants.push_back(getCurrentUsername());
+        for(int i = 0; i< n ;)
+        {
+            cout << "Enter participant username: ";
+            cin >> x;
+            z = 0;
+            int alreadyIn = 0;
+            for(string p : participants)
+            {
+                if (p == x)
+                {
+                    cout << "Already in group\n";
+                    alreadyIn = 1;
+
+                }
+            }
+            if(!alreadyIn)
+            {
+                for(User u : users)
+                {
+                    if(u.getUsername() == x)
+                    {
+                        z = 1;
+                        cout << "Added " << u.getUsername() << endl;
+                        participants.push_back(u.getUsername());
+                        i++;
+                    }
+                }
+                if(z == 0)
+                {
+                    cout << "No user with this username" << endl;
+                }
+            }
+        }
+        //participants.push_back(getCurrentUsername());
+        GroupChat *newChat = new GroupChat(participants,GroupName,getCurrentUsername());
+        chats.push_back(newChat);
+
+        cin.ignore();
+        string m;
+        cout << "\nEnter your message(enter \"exit\" to close the chat): ";
+        getline(cin, m);
+        while(m != "exit")
+        {
+            Message mes(getCurrentUsername(), m);
+            mes.addEmoji(":)");
+            mes.addEmoji(":(");
+            mes.addEmoji("<3");
+            mes.addEmoji(":thumbsup:");
+            mes.addEmoji(":D");
+            newChat->addMessage(mes);
+            mes.display();
+            cout << "\nEnter your message(enter \"exit\" to close the chat): ";
+            getline(cin, m);
+        }
+
     }
 
-    void viewChats() const
+    void viewChats()
     {
-        // TODO: Implement chat viewing
+        string currentUser = getCurrentUsername();
+        vector<int> visibleChats;
+
+        cout << "\nYour Chats:\n";
+
+        for (int i = 0; i < chats.size(); i++)
+        {
+            if (chats[i]->isParticipant(currentUser))
+            {
+                cout << visibleChats.size() + 1 << ". Chat " << i + 1 << endl;
+                visibleChats.push_back(i);
+            }
+        }
+
+        if (visibleChats.empty())
+        {
+            cout << "You are not part of any chats.\n";
+            return;
+        }
+
+        cout << "Select chat number to view (0 to cancel): ";
+        int choice;
+        cin >> choice;
+
+        if (choice == 0) return;
+
+        if (choice < 1 || choice > visibleChats.size())
+        {
+            cout << "Invalid choice.\n";
+            return;
+        }
+
+        Chat* selectedChat = chats[visibleChats[choice - 1]];
+        cout << "\n------------- CHAT -------------\n";
+        selectedChat->displayChat();
+
+        while(true)
+        {
+            //cout << "\n------------- CHAT -------------\n";
+            //selectedChat->displayChat();
+
+            cout << "\n1. Send Message\n";
+            cout << "2. Search Messages\n";
+            cout << "3. Delete Message\n";
+            cout << "4. Export Chat\n";
+
+            GroupChat* gChat = dynamic_cast<GroupChat*>(selectedChat);
+
+            if(gChat && gChat->isAdmin(currentUser))
+            {
+                cout << "5. Add Admin\n";
+                cout << "6. Remove Participant\n";
+                cout << "7. Exit Chat\n";
+            }
+            else
+            {
+                cout << "5. Exit Chat\n";
+            }
+
+            int option;
+            cin >> option;
+            cin.ignore();
+
+            if(option == 1)
+            {
+                string m;
+                cout << "Enter message: ";
+                getline(cin, m);
+
+                Message mes(currentUser, m);
+
+                mes.addEmoji(":)");
+                mes.addEmoji(":(");
+                mes.addEmoji("<3");
+                mes.addEmoji(":thumbsup:");
+                mes.addEmoji(":D");
+
+                selectedChat->addMessage(mes);
+                mes.display();
+            }
+
+            else if(option == 2)
+            {
+                string keyword;
+                cout << "Enter keyword: ";
+                getline(cin, keyword);
+
+                vector<Message> results = selectedChat->searchMessages(keyword);
+
+                if(results.empty())
+                    cout << "No messages found.\n";
+                else
+                {
+                    for(const Message &m : results)
+                        m.display();
+                }
+            }
+
+            else if(option == 3)
+            {
+                int index;
+                cout << "Enter message index to delete: ";
+                cin >> index;
+
+                if(selectedChat->deleteMessage(index, currentUser))
+                    cout << "Message deleted.\n";
+                else
+                    cout << "Cannot delete this message.\n";
+            }
+
+            else if(option == 4)
+            {
+                string file;
+                cout << "Enter filename: ";
+                cin >> file;
+
+                selectedChat->exportToFile(file);
+                cout << "Chat exported.\n";
+            }
+
+
+            else if(gChat && gChat->isAdmin(currentUser) && option == 5)
+            {
+                string newAdmin;
+                cout << "Enter username to make admin: ";
+                cin >> newAdmin;
+
+                if(gChat->isParticipant(newAdmin))
+                {
+                    gChat->addAdmin(newAdmin);
+                    cout << newAdmin << " is now an admin.\n";
+                }
+                else
+                {
+                    cout << "User is not in the group.\n";
+                }
+            }
+
+            else if(gChat && gChat->isAdmin(currentUser) && option == 6)
+            {
+                string userRemove;
+                cout << "Enter username to remove: ";
+                cin >> userRemove;
+
+                if(gChat->removeParticipant(currentUser, userRemove))
+                    cout << userRemove << " removed from group.\n";
+                else
+                    cout << "Cannot remove user.\n";
+            }
+
+            else if((gChat && gChat->isAdmin(currentUser) && option == 7) ||
+                    (!gChat && option == 5) ||
+                    (gChat && !gChat->isAdmin(currentUser) && option == 5))
+            {
+                break;
+            }
+
+            else
+            {
+                cout << "Invalid option.\n";
+            }
+        }
     }
 
     void logout()
@@ -593,7 +873,12 @@ public:
             {
                 cout << "\n1. Login\n2. Sign Up\n3. Exit\nChoice: ";
                 int choice;
-                cin >> choice;
+                while(!(cin >> choice))
+                {
+                    cin.clear();
+                    cin.ignore(1000, '\n');
+                    cout << "Invalid input. Enter a number: ";
+                }
 
                 if (choice == 1)
                     login();
@@ -606,7 +891,12 @@ public:
             {
                 cout << "\n1. Start Private Chat\n2. Create Group\n3. View Chats\n4. Logout\nChoice: ";
                 int choice;
-                cin >> choice;
+                while(!(cin >> choice))
+                {
+                    cin.clear();
+                    cin.ignore(1000, '\n');
+                    cout << "Invalid input. Enter a number: ";
+                }
 
                 if (choice == 1)
                     startPrivateChat();
